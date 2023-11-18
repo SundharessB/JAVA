@@ -1,49 +1,71 @@
 import java.util.*;
 
-public class TopKFrequentNumbers {
+public class TopK {
 
-    private static int[] inputArray;
+    private static int[] numbers;
 
     public static void main(String[] args) {
-        // Test case 1
-        int[] array1 = {3, 1, 4, 4, 5, 2, 6, 1};
-        int k1 = 2;
-        System.out.println("Test Case 1:");
-        displayTopKFrequentNumbers(array1, k1);
+        Scanner scanner = new Scanner(System.in);
 
-        // Test case 2
-        int[] array2 = {7, 10, 11, 5, 2, 5, 5, 7, 11, 8, 9};
-        int k2 = 4;
-        System.out.println("\nTest Case 2:");
-        displayTopKFrequentNumbers(array2, k2);
+        System.out.print("Enter the size of the array: ");
+        int size = scanner.nextInt();
+        numbers = new int[size];
+
+        System.out.println("Enter the elements of the array:");
+        for (int i = 0; i < size; i++) {
+            numbers[i] = scanner.nextInt();
+        }
+
+        System.out.print("Enter the value of K: ");
+        int k = scanner.nextInt();
+
+        displayTopKFrequent(k);
+
+        scanner.close();
     }
 
-    private static void displayTopKFrequentNumbers(int[] array, int k) {
-        inputArray = array;
-        List<Integer> result = findTopKFrequentNumbers(k);
-        System.out.println("Output: " + result);
+    private static void displayTopKFrequent(int k) {
+        int[] result = findTopKFrequent(k);
+        System.out.print("Output: ");
+        for (int x : result) {
+            System.out.print(x + " ");
+        }
+        System.out.println();
     }
 
-    private static List<Integer> findTopKFrequentNumbers(int k) {
+    private static int[] findTopKFrequent(int k) {
         Map<Integer, Integer> frequencyMap = new HashMap<>();
 
         // Count the frequency of each number in the array
-        for (int num : inputArray) {
-            frequencyMap.put(num, frequencyMap.getOrDefault(num, 0) + 1);
+        for (int x : numbers) {
+            frequencyMap.put(x, frequencyMap.containsKey(x) ? frequencyMap.get(x) + 1 : 1);
         }
 
-        // Create a priority queue based on frequency and number value
-        PriorityQueue<Map.Entry<Integer, Integer>> pq = new PriorityQueue<>(
-                (a, b) -> a.getValue() != b.getValue() ? b.getValue() - a.getValue() : b.getKey() - a.getKey()
-        );
+        // Create an array to store frequencies and numbers
+        int[][] freqArray = new int[frequencyMap.size()][2];
+        int i = 0;
+        for (Map.Entry<Integer, Integer> entry : frequencyMap.entrySet()) {
+            freqArray[i][0] = entry.getKey();
+            freqArray[i][1] = entry.getValue();
+            i++;
+        }
 
-        // Add entries to the priority queue
-        pq.addAll(frequencyMap.entrySet());
+        // Sort the array based on frequency and number value
+        for (int p = 0; p < freqArray.length - 1; p++) {
+            for (int q = 0; q < freqArray.length - p - 1; q++) {
+                if ((freqArray[q][1] < freqArray[q + 1][1]) ||
+                        (freqArray[q][1] == freqArray[q + 1][1] && freqArray[q][0] < freqArray[q + 1][0])) {
+                    int[] temp = freqArray[q];
+                    freqArray[q] = freqArray[q + 1];
+                    freqArray[q + 1] = temp;
+                }
+            }
+        }
 
         // Retrieve the top K frequent numbers
-        List<Integer> result = new ArrayList<>();
-        for (int i = 0; i < k; i++) {
-            result.add(pq.poll().getKey());
+        int[] result = new int[k];
+        for (i = 0; i < k; i++) {
+            result[i] = freqArray[i][0];
         }
 
         return result;
