@@ -1,7 +1,3 @@
-// lab 7 Program
-// Scenario - Ongoing advancement of Amazon's CRM infra, the goal is to streamline customer data management and optimize data processing.
-// Implementing three classes customer,product,order
-// Using various data structure for optimizing data storage, retrieval and management
 
 import java.util.ArrayList; // For managing dynamic lists of customers, products and orders
 import java.util.HashMap; // Efficient retrieval of products and customers
@@ -9,7 +5,6 @@ import java.util.HashSet; // Eliminates duplicates
 import java.util.TreeSet; // Sorting
 
 
-// Creation of customer class
 
 class Customer{
 
@@ -17,7 +12,6 @@ class Customer{
     public String customerName;
     public int customerPincode;
 
-    // Constructor
     public Customer(int customerId, String customerName, int customerPincode){
 
         this.customerId = customerId;
@@ -25,30 +19,30 @@ class Customer{
         this.customerPincode = customerPincode;
     }
 
-    // Getting customer id
+
     public int returncustomerId(){
         return customerId;
     }
 
-    // Getting customer name
+   
     public String returncustomerName(){
         return customerName;
     }
 
-    // Getting pincode
+   
     public int returnPincode(){
         return customerPincode;
     }
 }
 
-// Creation of product class
+
 
 class Product{
 
     int productId;
     String productName;
 
-    // Constructor
+    
     public Product(int productId, String productName){
 
       this.productId = productId;
@@ -68,7 +62,7 @@ class Product{
 
 }
 
-// Creation of order class
+
 
 class Order{
 
@@ -118,7 +112,7 @@ public class AmazonCRM {
 
     }
 
-    // This method is used to add customer
+
 
     public void addCustomer(Customer customer){
         customers.add(customer);
@@ -126,8 +120,7 @@ public class AmazonCRM {
         sortedCustomers.add(customer);
     }
 
-    // This method is used to add product
-
+  
     public void addProduct(Product product){
 
         products.add(product);
@@ -135,7 +128,7 @@ public class AmazonCRM {
 
     }
 
-    // This method is for placing the order
+   
 
     public void placeOrder(Order order){
         orders.add(order);
@@ -146,7 +139,7 @@ public class AmazonCRM {
     }
 
 
-    // This method is for finding the customer by id
+ 
 
     public Customer findCustomerById(Integer customerId){
         return customerMap.get(customerId);
@@ -159,26 +152,23 @@ public class AmazonCRM {
     }
 
 
-    // This method retrives the products for respective customer using HashSet
-
+    
     public HashSet<Product> getProductsForCustomer(Customer customer){
 
         return customerproductMap.getOrDefault(customer, new HashSet<>());
 
     }
 
-    // Sorted Customers using TreeSet Data Structure
 
     public TreeSet<Customer> getSortedCustomers(){
         return sortedCustomers;
     }
 
-    // Main Method
+    
     public static void main(String[] args) {
 
         AmazonCRM acrm = new AmazonCRM();
 
-        // Creation of customers, products and orders
        
          Customer customer1 = new Customer(234, "Badri", 625013);
          Customer customer2 = new Customer(235, "Jacob", 625009);
@@ -187,12 +177,10 @@ public class AmazonCRM {
          Product product2 = new Product(888, "Mac");
 
          Order order1 = new Order(144, customer1);
-        //  Order order2 = new Order(2, customer1);
 
         order1.addProducts(product2);
 
 
-        // Adding customers, products, and orders to the CRM
 
         acrm.addCustomer(customer1);
         acrm.addCustomer(customer2);
