@@ -1,6 +1,4 @@
-// Lab 6 Program 2
-// Description - Handling efficient functionalities for both customers and administrators in a online shopping platform.
-// Implementing exception handling to handle various scenarios
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,9 +8,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 
-// Handling custom exceptions
-// This class is to handle order processing exceptions
-// Base exception an used as a super class for more specific exceptions
+
 
 class OrderProcessingException extends Exception{
     public OrderProcessingException(String message){
@@ -21,8 +17,7 @@ class OrderProcessingException extends Exception{
 
 }
 
-// This class is to hande insufficient inventory exceptions
-// This exception is thrown when the system encounters insufficient inventory while attempting to process an order
+
 
 class InsufficientInventoryException extends OrderProcessingException{
 
@@ -31,7 +26,6 @@ class InsufficientInventoryException extends OrderProcessingException{
     }
 }
 
-// This class is to handle order cancelled exceptions
 
 class OrderCancelledException extends OrderProcessingException{
 
@@ -40,14 +34,12 @@ class OrderCancelledException extends OrderProcessingException{
     }
 }
 
-// Enum for order status
-// Enum is used to define predefined constants, it has three constants
+
 
 enum OrderStatus{
     PROCESSING, COMPLETED, CANCELLED
 }
 
-// Creation of Item class
 
 class Item{
     public String name;
@@ -68,14 +60,14 @@ class Item{
     }
 }
 
-// Creation of Order class
+
 
 class Order{
     public int orderId;
     public List<Item> item;
     public OrderStatus status;
 
-    // Constructor
+    
     public Order(int orderId, List<Item> item){
         this.orderId = orderId;
         this.item = item;
@@ -101,7 +93,7 @@ class Order{
 
 }
 
-// This class contains the core functionality
+
 
 public class EnhancedOrderFulfillmentSystem {
 
@@ -114,15 +106,13 @@ public class EnhancedOrderFulfillmentSystem {
         inventory = new HashMap<>();
     }
 
-    // The usage of synchronized is it will allow single thread at a time
-
+    
     public synchronized void placeOrder(Order order){
         orders.add(order);
         System.out.println("Order " + order.getOrderId() + " placed");
     }
 
-    // This method is used to update the inventory 
-
+    
     public synchronized void updateInventory(Order order) throws InsufficientInventoryException{
         
         for(Item item: order.getItems()){
@@ -144,8 +134,7 @@ public class EnhancedOrderFulfillmentSystem {
         }
     }
 
-    // This method is to check the inventory availability
-
+    
     public synchronized boolean checkInventoryAvailability(Item item){
 
         int availableQuantity = inventory.getOrDefault(item.getName(), 0);
@@ -153,14 +142,11 @@ public class EnhancedOrderFulfillmentSystem {
 
     }
 
-    // This method is responsible for initiating the processing of submitted orders using worker threads
-    // Worker Threads is a part of thread pool. It is a managed collection of threads created to execute tasks simultaneously
-    // Instead of creating a various threads the thread pool uses a fixed size and allows to execute tasks concurently
-
+    
     public void startProcessing(){
 
         ExecutorService executor = Executors.newFixedThreadPool(3); // Creates a thread pool with three worker threads
-        // Looping through the list of orders
+     
         for(Order order: orders){
             executor.execute(()->{ // submits each order processing task
                 try{
@@ -198,19 +184,18 @@ public class EnhancedOrderFulfillmentSystem {
 
     }
 
-    // Main Method
+  
 
     public static void main(String[] args) {
         
         EnhancedOrderFulfillmentSystem eos = new EnhancedOrderFulfillmentSystem();
 
-        // Adding items to the inventory
+       
 
         eos.inventory.put("Item1", 10);
         eos.inventory.put("Item2", 5);
         eos.inventory.put("Item3", 8);
 
-        // Creating orders
 
         List<Item> items1 = List.of(new Item("Item1", 2), new Item("Item2", 1));
         List<Item> items2 = List.of(new Item("Item3", 12));
@@ -223,16 +208,15 @@ public class EnhancedOrderFulfillmentSystem {
         System.out.println("---------------------------------");
         System.out.println("");
 
-        // Placing the order
+       
 
         eos.placeOrder(order1);
         eos.placeOrder(order2);
 
-        // Start order processing
+    
 
         eos.waitForCompletion();
 
-        // Tracking Order Status
 
         System.out.println(eos.trackOrderStatus(1));
         System.out.println(eos.trackOrderStatus(2));
