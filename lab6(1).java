@@ -5,7 +5,7 @@ import java.util.Scanner;
         int n = coins.length;
         int[][] dp = new int[n + 1][sum + 1];
 
-        // Base case: If the sum is 0, there is 1 way (empty set).
+       
         for (int i = 0; i <= n; i++) {
             dp[i][0] = 1;
         }
@@ -15,7 +15,7 @@ import java.util.Scanner;
                 // Exclude the current coin
                 dp[i][j] = dp[i - 1][j];
 
-                // Include the current coin if it doesn't exceed the sum
+                
                 if (coins[i - 1] <= j) {
                     dp[i][j] += dp[i][j - coins[i - 1]];
                 }
